@@ -5,8 +5,6 @@ const app = express();
 const morgan = require('morgan');
 const userRouter = require('./router/userRouter');
 
-
-
 //express meddlewares
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
