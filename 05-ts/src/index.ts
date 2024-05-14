@@ -29,7 +29,7 @@ class Persona {
 }
 
 //instancia de la clase: objeto
-const Pepe = new Persona('Pepe', '23');
+const Pepe = new Persona('Pepe', 23);
 const Pepe1 = new Persona('Pepe@gmail.com', 2500);
 const correcto = new Persona('Mario', 20);
 
