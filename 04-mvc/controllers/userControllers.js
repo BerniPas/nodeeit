@@ -6,12 +6,25 @@ const dameUsuarios =  (req = request, res = response) => {
     )
 }
 
+const dameFormulario = (req = request, res = response) => {
+    res.render('formulario');
+}   
+
 const crearUsuarios = (req = request, res = response) => {
 
     const usuario = req.body
 
-    res.json({ 
-        users: usuario
+    //const { email, password } = req.body;
+
+    const email = req.body.email;
+    const password = req.body.password;
+
+    console.log(usuario);
+    console.log(email, password);
+
+    res.render('resForm', {
+        email: email,
+        password: password
     })
 }
 
@@ -31,5 +44,6 @@ module.exports = {
     dameUsuarios,
     crearUsuarios,
     actualizarUsuarios,
-    eliminarUsuarios
+    eliminarUsuarios,
+    dameFormulario
 };

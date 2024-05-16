@@ -5,7 +5,8 @@ const {
     dameUsuarios,
     crearUsuarios,
     actualizarUsuarios,
-    eliminarUsuarios
+    eliminarUsuarios,
+    dameFormulario
 } = require('../controllers/userControllers');
 
 /* 
@@ -13,14 +14,15 @@ const {
  */
 
 //crear un array de users
-let users = { id: 1, name: 'Jhon', email: 'jhon@gmail.com' }
+//let users = { id: 1, name: 'Jhon', email: 'jhon@gmail.com' }
 
 //R: leer los datos
 router.get('/', dameUsuarios);
 
+router.get('/form', dameFormulario);
 
 //C: crear un nuevo usuario
-router.post('/', crearUsuarios);
+router.post('/form', crearUsuarios);
 
 
 //U: actualizar un usuario
