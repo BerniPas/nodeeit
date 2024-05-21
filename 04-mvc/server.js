@@ -4,6 +4,7 @@ const PORT = process.env.PORT || 8080;
 const app = require('./index');
 
 //conectar a la dabase
+const conexion = require('./database/conexion');
 
 
 //levantar el server
