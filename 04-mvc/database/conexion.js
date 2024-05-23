@@ -15,7 +15,7 @@ const MONGO_LOCAL = process.env.MONGO_LOCAL;
 const MONGO_ATLAS = process.env.MONGO_ATLAS;
 
 
-const conexion = mongoose.connect(MONGO_LOCAL, clientOptions)
+const conexion = mongoose.connect(MONGO_ATLAS, clientOptions)
     .then(
         () => { 
             console.log('==========================================');

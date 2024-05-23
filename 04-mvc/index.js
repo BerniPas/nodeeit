@@ -25,10 +25,12 @@ app.use(express.static('public'));
 
 //utilizamos el router como un middleware
 app.use('/user', userRouter);
-//app.use('/product', productRouter);
+app.use('/product', require('./router/productRouter'));
 //app.use('/admin', adminRouter);
 //app.use('/login', loginRouter);
 
+console.log(new Date() );
+console.log(Date.now());
 
 app.get('/', (req, res) => {
     res.render('index');

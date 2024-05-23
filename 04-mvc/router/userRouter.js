@@ -2,11 +2,12 @@ const express = require('express');
 const router = express.Router();
 
 const { 
-    dameUsuarios,
+    dameFormulario,
     crearUsuarios,
+    dameLogin,
+    dameUsuarios,
     actualizarUsuarios,
     eliminarUsuarios,
-    dameFormulario
 } = require('../controllers/userControllers');
 
 /* 
@@ -20,6 +21,8 @@ const {
 router.get('/', dameUsuarios);
 
 router.get('/form', dameFormulario);
+
+router.get('/formLogin', dameLogin);
 
 //C: crear un nuevo usuario
 router.post('/form', crearUsuarios);
