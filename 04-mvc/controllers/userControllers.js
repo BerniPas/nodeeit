@@ -1,12 +1,20 @@
 const { request, response } = require('express');
 const User = require('../models/userModel'); 
+const { validationResult } = require('express-validator');
+const bcrypt = require('bcrypt');
 
 
 
-const dameUsuarios =  (req = request, res = response) => {
-    res.send(`<h1>Users:</h1><br></br>
-        <p>Envío la lista de usuarios desde el controlador</p>`
-    )
+const dameUsuarios = async (req = request, res = response) => {
+
+    const usuarios = await User.find({});
+
+    console.log(usuarios);
+
+    res.render('userList', {
+        usuario: usuarios
+    });
+
 }
 
 const dameFormulario = (req = request, res = response) => {
@@ -17,16 +25,19 @@ const dameLogin = (req = request, res = response) => {
     res.render('login');
 }   
 
+
+//Create: Creamos el User
 const crearUsuarios = async (req = request, res = response) => {
     
-    
-    //const { nombre, email, password } = req.body;
+    const validar = validationResult(req);
 
-    const nombre = req.body.nombre;
-    const email = req.body.email;
-    const password = req.body.password;
+    const { nombre, email, password } = req.body;
 
-    const usuario = req.body
+    if(!validar.isEmpty()){
+        return res.render('error', {
+            error: 'Algunos datos son incorrectos'
+        })
+    }
 
     const persona = {
         nombre: nombre,
@@ -34,38 +45,25 @@ const crearUsuarios = async (req = request, res = response) => {
         password: password
     }
     
-    console.log(usuario);
-    console.log(email, password);
-
-    //instanciamos un objeto para utilizar el esquema de datos de users
-    //const user = new User(nombre, email, password);
-    //const user = new User(persona);
-    //const user = new User(req.body);
-    const user = new User(usuario);
-/* 
-    const datoGuardado = await user.save();
-
-    console.log(datoGuardado);
-
-    if(datoGuardado){
-        return res.render('resForm', {
-            email: email,
-            password: password
-        })
-    }else{
-        const err = 'Tenemos un error en la creación de usuarios'
-        console.log(error);
-        return res.render('error', {
-            error: err
-        })
-    } */
-
     try {
+        //generamos la salt para encriptar la contraseña
+        const salt = await bcrypt.genSalt(10);
         
-        await user.save();
+        //encriptamos la contraseña
+        persona.password = await bcrypt.hash(password, salt);
+    
+        const user = new User(persona);
         
-        return res.render('login')
+        const userCreado = await user.save();
 
+        if(userCreado){
+            return res.render('login')
+        }else{
+            return res.render('error', {
+                error: 'No se pudo crear el usuario'
+            })
+        }
+    
     } catch (error) {
 
         const err = 'Tenemos un error en la creación de usuarios'
@@ -74,9 +72,7 @@ const crearUsuarios = async (req = request, res = response) => {
             error: err
         })
 
-    } 
-
-
+    }
 
 }
 

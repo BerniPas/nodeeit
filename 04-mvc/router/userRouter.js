@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { check, body, query } = require('express-validator');
 
 const { 
     dameFormulario,
@@ -25,8 +26,11 @@ router.get('/form', dameFormulario);
 router.get('/formLogin', dameLogin);
 
 //C: crear un nuevo usuario
-router.post('/form', crearUsuarios);
-
+router.post('/form', [
+    check("nombre").isString().isLength({min: 3}),
+    check("email").isEmail(),
+    check("password").isString().isLength({min: 6})
+], crearUsuarios);
 
 //U: actualizar un usuario
 router.put('/', actualizarUsuarios);
