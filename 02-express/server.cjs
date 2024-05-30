@@ -21,6 +21,15 @@ const {
 //creamos un puerto para el servidor
 const PORT = process.env.PORT || 9000;
 
+
+const { client, conectar } = require('./models/conexion');
+const db = client.db("eduit");
+conectar(db)
+.then(
+    console.log('Conectado a la base de datos de eduit')
+)
+.catch(console.dir);
+
 //middlewares
 //middlewares
 /* const middlewares = (req, res, next) =>{
@@ -110,11 +119,40 @@ server.get('/tellevo', (req, res) => {
 });
 
 
-server.post('/file', (req, res) => {
+
+server.post('/file', async (req, res) => {
+
+    const { email, password, coleccion} = req.body;
+
+    const user = {
+        email: email,
+        password: password,
+        date: new Date()
+    };
+
+    const dbColeccion = coleccion;
+
+/*     user.insert();
+
+    conexion.query(`INSERT INTO usuarios (email, password, date) VALUES ('${email}', '${password}', NOW())`); */
+
+
+    
+    await db.createCollection("usuarios", function(err, res) {
+        if (err) throw err;
+        console.log("Collection created!");
+    });
+
+    await db.collection(dbColeccion).insertOne(user, function(err, res) {
+        if (err) throw err;
+        console.log("1 document inserted");
+    });
 
     console.log(req.method);
 
     console.log(req.body);//undefined
+
+    await client.close();
 
     res.send('Tus datos han sido recibidos correctamente');
 
@@ -154,5 +192,10 @@ server.patch('/actualizar/:id', (req, res)=>{
 
 
 server.listen(PORT, () => {
+
+
+
+
     console.log(`Example app listening on port http://localhost:${PORT}`)
+
 })

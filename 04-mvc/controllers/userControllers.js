@@ -2,6 +2,7 @@ const { request, response } = require('express');
 const User = require('../models/userModel'); 
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
+const enviarMail = require('../servicios/enviarEmail');
 
 
 
@@ -39,6 +40,17 @@ const crearUsuarios = async (req = request, res = response) => {
         })
     }
 
+    //validamos que el usuario no exista
+    const usuariosExiste = await User.findOne({email: email});
+
+    console.log(usuariosExiste);
+
+    if(usuariosExiste){
+        return res.render('error', {
+            error: 'El usuario ya existe'
+        })
+    }
+
     const persona = {
         nombre: nombre,
         email: email,
@@ -55,6 +67,12 @@ const crearUsuarios = async (req = request, res = response) => {
         const user = new User(persona);
         
         const userCreado = await user.save();
+
+        enviarMail(nombre, email).then(() => {
+            console.log('Correo enviado')
+        }).catch((err) => {
+            let error = 'No se pudo enviar el correo'
+        });
 
         if(userCreado){
             return res.render('login')
