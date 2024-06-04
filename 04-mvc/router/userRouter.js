@@ -5,6 +5,7 @@ const { check, body, query } = require('express-validator');
 const { 
     dameFormulario,
     crearUsuarios,
+    loginUsuarios,
     dameLogin,
     dameUsuarios,
     actualizarUsuarios,
@@ -31,6 +32,12 @@ router.post('/form', [
     check("email").isEmail(),
     check("password").isString().isLength({min: 6})
 ], crearUsuarios);
+
+//Ruto del Login
+router.post('/login', [
+    check("email").isEmail(),
+    check("password").isString().isLength({min: 6})
+], loginUsuarios);
 
 //U: actualizar un usuario
 router.put('/', actualizarUsuarios);

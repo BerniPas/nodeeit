@@ -1,7 +1,11 @@
 
 <div class="container mt-5">
     <h1>
-        Formulario de Registro
+        Formulario de Registro - Bienvenido {{ nombre }}
+    </h1>
+
+    <h1 style="color: red;">
+        Error: {{ error }}
     </h1>
 </div>
 
@@ -17,7 +21,7 @@
         </div>
         <div class="mb-3">
             <label for="password1" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" name="password">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Mínimo de 6 caracteres">
         </div>
         <div class="mb-3 text-center ">
             <button type="submit" class="btn btn-primary w-25">Registrarse</button>

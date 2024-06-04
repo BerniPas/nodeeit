@@ -3,6 +3,10 @@ const User = require('../models/userModel');
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
 const enviarMail = require('../servicios/enviarEmail');
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+dotenv.config();
+
 
 
 
@@ -94,7 +98,72 @@ const crearUsuarios = async (req = request, res = response) => {
 
 }
 
+//Login de usuarios
+const loginUsuarios = async (req = request, res = response) => {
+
+    const { email, password } = req.body;
+
+    const validar = validationResult(req);
+
+    if(!validar.isEmpty()){
+        return res.render('error', {
+            error: 'Algunos datos son incorrectos'
+        })
+    }
+
+    console.log(email, password);
+
+    try {
+
+        const user = await User.findOne({email})
+
+        console.log(user);
+
+        if(!user){
+            const err = 'Debe registrarse para acceder a la app'
+            return res.render('formulario', {
+                error: err
+            })
+        }
+
+        //desencriptamos el password
+        const passwordValido = await bcrypt.compare(password, user.password);
+
+        if(!passwordValido){
+            const err = 'Email o Contraseña Incorrectos'
+            return res.render('error', {
+                error: err
+            })
+        }
+
+        const miFirma = process.env.JWT_SECRET;
+        //iniciar una session
+
+        //agregar el JWT
+        const token = jwt.sign({
+            nombre: user.nombre
+        }, miFirma, {        
+            expiresIn: '1h'
+        });
+
+        res.header('auth-token', token).render('formProductos');
+
+
+    } catch (error) {
+        const err = 'Email o Contraseña Incorrectos'
+        console.log(error);
+        return res.render('error', {
+            error: err
+        })
+    }
+
+
+}
+
+
+
 const actualizarUsuarios = (req, res) => {
+
     res.json({
         actualizado: 'Datos Actualizdos'
     })
@@ -110,6 +179,7 @@ module.exports = {
     dameFormulario,
     dameLogin,
     crearUsuarios,
+    loginUsuarios,
     actualizarUsuarios,
     eliminarUsuarios,
     dameUsuarios,

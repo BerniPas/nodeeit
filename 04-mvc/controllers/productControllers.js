@@ -2,6 +2,8 @@ const { request, response } = require('express')
 
 
 const formProductos =  (req = request, res = response) => {
+
+    //verificar si el JWT es valido
     res.render('formProductos')
 }
 const registerProductos =  (req = request, res = response) => {
