@@ -111,7 +111,7 @@ const loginUsuarios = async (req = request, res = response) => {
         })
     }
 
-    console.log(email, password);
+    //console.log(email, password);
 
     try {
 
@@ -146,7 +146,7 @@ const loginUsuarios = async (req = request, res = response) => {
             expiresIn: '1h'
         });
 
-        res.header('auth-token', token).render('formProductos');
+        res.header('auth-token', token).render('formProductos', { token: token });
 
 
     } catch (error) {

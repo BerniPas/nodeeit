@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const { check } = require('express-validator');
 
 const {
     formProductos,
     registerProductos,
-    cardProductos
+    cardProductos,
+    getProductos
 } = require('../controllers/productControllers');
 
 /* 
@@ -12,7 +14,14 @@ const {
  */
 
 router.get('/', formProductos);
-router.post('/', registerProductos);
-router.get('/', cardProductos);
+router.post('/', [
+    check("nombre").isString().isLength({min: 3}),
+    check("precio").isNumeric(),
+    check("imagen").isString(),
+    check("descripcion").isString()
+], registerProductos);
+router.get('/productos', getProductos)
+router.get('/cards', cardProductos)
+
 
 module.exports = router;
