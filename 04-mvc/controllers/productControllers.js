@@ -84,21 +84,59 @@ const registerProductos = async (req = request, res = response) => {
 
 const cardProductos = async (req = request, res = response) => {
     
-    const productos = await Product.find({});
-
-    console.log(productos);
-
+    const producto = await Product.find();
+    
+    console.log(producto);
+    
     res.render('cardsProductos', {
-        producto: productos
-    });
+        producto
+        });
+        
+}
 
+
+
+const detalleProductos = async (req = request, res = response) => {
+
+    const idProduct = req.params._id;
+
+    console.log(idProduct);
+
+    try {
+
+        const producto = await Product.findById({_id: idProduct});
+        console.log(producto);
+    
+        const imagen = producto.imagen;
+        const nombre = producto.nombre;
+        const precio = producto.precio;
+        const descripcion = producto.descripcion;
+        
+        console.log(imagen);
+    
+    
+        return res.render('detalleProductos', {
+            imagen,
+            nombre,
+            precio,
+            descripcion
+        })
+        
+    } catch (error) {
+        console.log(error);
+        return res.render('error', {
+            error: 'No se ha encontrado el producto'
+        })
+    }
+    
 }
 
 module.exports = {
     formProductos,
     registerProductos,
     cardProductos,
-    getProductos
+    getProductos,
+    detalleProductos
 }
 
 //by Gustavo

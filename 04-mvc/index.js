@@ -5,6 +5,7 @@ const app = express();
 const morgan = require('morgan');
 const userRouter = require('./router/userRouter');
 const hbs = require('hbs');
+const path = require('node:path');
 
 
 // configuración de hbs
@@ -21,7 +22,7 @@ hbs.registerPartials(__dirname + '/views/partials');
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(morgan('dev'));
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, '/public')));
 
 //utilizamos el router como un middleware
 app.use('/user', userRouter);

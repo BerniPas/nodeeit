@@ -6,7 +6,8 @@ const {
     formProductos,
     registerProductos,
     cardProductos,
-    getProductos
+    getProductos,
+    detalleProductos
 } = require('../controllers/productControllers');
 
 /* 
@@ -22,6 +23,7 @@ router.post('/', [
 ], registerProductos);
 router.get('/productos', getProductos)
 router.get('/cards', cardProductos)
+router.get('/detalle/:_id', detalleProductos)
 
 
 module.exports = router;
